@@ -14,7 +14,6 @@ local AlertModeButton = Instance.new("TextButton")
 local SpeedBoostButton = Instance.new("TextButton")
 local JumpBoostButton = Instance.new("TextButton")
 local CloseButton = Instance.new("TextButton")
-local FlingMurderButton = Instance.new("TextButton")
 
 -- Configurações da Interface
 ScreenGui.Name = "EletricHubGUI"
@@ -26,7 +25,7 @@ MainFrame.Parent = ScreenGui
 MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 30)
 MainFrame.BorderSizePixel = 0
 MainFrame.Position = UDim2.new(0.1, 0, 0.1, 0)
-MainFrame.Size = UDim2.new(0, 300, 0, 450)
+MainFrame.Size = UDim2.new(0, 300, 0, 400)
 MainFrame.Active = true
 MainFrame.Draggable = true
 
@@ -60,8 +59,7 @@ ElectricModeButton = CreateButton("ElectricModeButton", "Modo Elétrico ⚡", 20
 AlertModeButton = CreateButton("AlertModeButton", "Alerta Murder Perto", 250)
 SpeedBoostButton = CreateButton("SpeedBoostButton", "Velocidade Turbo", 300)
 JumpBoostButton = CreateButton("JumpBoostButton", "Pulo Aumentado", 350)
-FlingMurderButton = CreateButton("FlingMurderButton", "Fling Murder", 400)
-CloseButton = CreateButton("CloseButton", "Fechar", 450)
+CloseButton = CreateButton("CloseButton", "Fechar", 390)
 CloseButton.BackgroundColor3 = Color3.fromRGB(255, 60, 60)
 
 -- Funções
@@ -146,4 +144,13 @@ AlertModeButton.MouseButton1Click:Connect(function()
 end)
 
 SpeedBoostButton.MouseButton1Click:Connect(function()
-    game.Players
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 30
+end)
+
+JumpBoostButton.MouseButton1Click:Connect(function()
+    game.Players.LocalPlayer.Character.Humanoid.JumpPower = 100
+end)
+
+CloseButton.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
