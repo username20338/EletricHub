@@ -1,4 +1,5 @@
--- EletricHub - Murder Mystery 2
+
+  -- EletricHub - Murder Mystery 2
 -- Criado por Carlos e ChatGPT ⚡
 -- Base: Milk Hub | Estilo: HenriqueHub com neon elétrico azul
 
@@ -64,15 +65,45 @@ CloseButton.BackgroundColor3 = Color3.fromRGB(255, 60, 60)
 
 -- Funções
 ESPButton.MouseButton1Click:Connect(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/milkinside/murderesp/main/milkesp.lua"))()
+    for _, player in pairs(game.Players:GetPlayers()) do
+        if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChild("Head") then
+            local esp = Instance.new("BillboardGui")
+            esp.Name = "ESPLabel"
+            esp.Size = UDim2.new(0, 100, 0, 40)
+            esp.Adornee = player.Character.Head
+            esp.AlwaysOnTop = true
+            esp.Parent = player.Character.Head
+
+            local text = Instance.new("TextLabel", esp)
+            text.Size = UDim2.new(1, 0, 1, 0)
+            text.Text = player.Name
+            text.TextColor3 = Color3.new(0, 1, 1)
+            text.BackgroundTransparency = 1
+            text.TextScaled = true
+        end
+    end
 end)
 
 GrabGunButton.MouseButton1Click:Connect(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/milkinside/mm2autogun/main/autogun.lua"))()
+    local player = game.Players.LocalPlayer
+    local function grabGun()
+        for _, obj in pairs(workspace:GetChildren()) do
+            if obj.Name == "GunDrop" then
+                player.Character.HumanoidRootPart.CFrame = obj.CFrame
+            end
+        end
+    end
+    while wait(1) do
+        pcall(grabGun)
+    end
 end)
 
 TeleportButton.MouseButton1Click:Connect(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/milkinside/teleportgun/main/tp.lua"))()
+    for _, obj in pairs(workspace:GetChildren()) do
+        if obj.Name == "GunDrop" then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = obj.CFrame
+        end
+    end
 end)
 
 ElectricModeButton.MouseButton1Click:Connect(function()
