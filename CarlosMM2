@@ -1,0 +1,126 @@
+-- EletricHub - Murder Mystery 2
+-- Criado por Carlos e ChatGPT ⚡
+-- Base: Milk Hub | Estilo: HenriqueHub com neon elétrico azul
+
+-- Interface básica futurista
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local Title = Instance.new("TextLabel")
+local ESPButton = Instance.new("TextButton")
+local GrabGunButton = Instance.new("TextButton")
+local TeleportButton = Instance.new("TextButton")
+local ElectricModeButton = Instance.new("TextButton")
+local AlertModeButton = Instance.new("TextButton")
+local SpeedBoostButton = Instance.new("TextButton")
+local JumpBoostButton = Instance.new("TextButton")
+local CloseButton = Instance.new("TextButton")
+
+-- Configurações da Interface
+ScreenGui.Name = "EletricHubGUI"
+ScreenGui.Parent = game.CoreGui
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 30)
+MainFrame.BorderSizePixel = 0
+MainFrame.Position = UDim2.new(0.1, 0, 0.1, 0)
+MainFrame.Size = UDim2.new(0, 300, 0, 400)
+MainFrame.Active = true
+MainFrame.Draggable = true
+
+Title.Name = "Title"
+Title.Parent = MainFrame
+Title.BackgroundColor3 = Color3.fromRGB(10, 10, 20)
+Title.Size = UDim2.new(1, 0, 0, 40)
+Title.Font = Enum.Font.GothamBold
+Title.Text = "⚡ EletricHub ⚡"
+Title.TextColor3 = Color3.fromRGB(0, 170, 255)
+Title.TextSize = 22.0
+
+local function CreateButton(name, text, posY)
+    local button = Instance.new("TextButton")
+    button.Name = name
+    button.Parent = MainFrame
+    button.BackgroundColor3 = Color3.fromRGB(25, 25, 45)
+    button.Position = UDim2.new(0, 10, 0, posY)
+    button.Size = UDim2.new(0, 280, 0, 40)
+    button.Font = Enum.Font.GothamBold
+    button.Text = text
+    button.TextColor3 = Color3.fromRGB(0, 255, 255)
+    button.TextSize = 16.0
+    return button
+end
+
+ESPButton = CreateButton("ESPButton", "Ativar ESP (Murder/Sheriff)", 50)
+GrabGunButton = CreateButton("GrabGunButton", "Auto Pegar Arma", 100)
+TeleportButton = CreateButton("TeleportButton", "Teleportar para Arma", 150)
+ElectricModeButton = CreateButton("ElectricModeButton", "Modo Elétrico ⚡", 200)
+AlertModeButton = CreateButton("AlertModeButton", "Alerta Murder Perto", 250)
+SpeedBoostButton = CreateButton("SpeedBoostButton", "Velocidade Turbo", 300)
+JumpBoostButton = CreateButton("JumpBoostButton", "Pulo Aumentado", 350)
+CloseButton = CreateButton("CloseButton", "Fechar", 390)
+CloseButton.BackgroundColor3 = Color3.fromRGB(255, 60, 60)
+
+-- Funções
+ESPButton.MouseButton1Click:Connect(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/milkinside/murderesp/main/milkesp.lua"))()
+end)
+
+GrabGunButton.MouseButton1Click:Connect(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/milkinside/mm2autogun/main/autogun.lua"))()
+end)
+
+TeleportButton.MouseButton1Click:Connect(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/milkinside/teleportgun/main/tp.lua"))()
+end)
+
+ElectricModeButton.MouseButton1Click:Connect(function()
+    local plr = game.Players.LocalPlayer
+    local char = plr.Character or plr.CharacterAdded:Wait()
+    for i = 1, 15 do
+        local bolt = Instance.new("Part")
+        bolt.Shape = Enum.PartType.Ball
+        bolt.Size = Vector3.new(0.5,0.5,0.5)
+        bolt.BrickColor = BrickColor.new("Electric blue")
+        bolt.Material = Enum.Material.Neon
+        bolt.Anchored = false
+        bolt.CanCollide = false
+        bolt.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(math.random(-3,3), math.random(0,5), math.random(-3,3))
+        bolt.Parent = workspace
+        game:GetService("Debris"):AddItem(bolt, 0.5)
+    end
+end)
+
+AlertModeButton.MouseButton1Click:Connect(function()
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
+
+    while true do
+        task.wait(1)
+        for _, player in pairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("Knife") then
+                local distance = (LocalPlayer.Character.HumanoidRootPart.Position - player.Character.HumanoidRootPart.Position).magnitude
+                if distance < 20 then
+                    game.StarterGui:SetCore("SendNotification", {
+                        Title = "⚠ ALERTA ⚠",
+                        Text = "O Murder está MUITO perto!",
+                        Duration = 2
+                    })
+                end
+            end
+        end
+    end
+end)
+
+SpeedBoostButton.MouseButton1Click:Connect(function()
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 30
+end)
+
+JumpBoostButton.MouseButton1Click:Connect(function()
+    game.Players.LocalPlayer.Character.Humanoid.JumpPower = 100
+end)
+
+CloseButton.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
