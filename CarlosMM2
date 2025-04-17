@@ -1,5 +1,4 @@
-
-  -- EletricHub - Murder Mystery 2
+-- EletricHub - Murder Mystery 2
 -- Criado por Carlos e ChatGPT ⚡
 -- Base: Milk Hub | Estilo: HenriqueHub com neon elétrico azul
 
@@ -84,12 +83,13 @@ ESPButton.MouseButton1Click:Connect(function()
     end
 end)
 
+-- Auto Pegar Arma
 GrabGunButton.MouseButton1Click:Connect(function()
     local player = game.Players.LocalPlayer
     local function grabGun()
         for _, obj in pairs(workspace:GetChildren()) do
-            if obj.Name == "GunDrop" then
-                player.Character.HumanoidRootPart.CFrame = obj.CFrame
+            if obj.Name == "GunDrop" and obj:IsA("Model") then
+                player.Character.HumanoidRootPart.CFrame = obj.PrimaryPart.CFrame
             end
         end
     end
@@ -98,14 +98,20 @@ GrabGunButton.MouseButton1Click:Connect(function()
     end
 end)
 
+-- Teleportar para Arma
 TeleportButton.MouseButton1Click:Connect(function()
-    for _, obj in pairs(workspace:GetChildren()) do
-        if obj.Name == "GunDrop" then
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = obj.CFrame
+    local player = game.Players.LocalPlayer
+    local function teleportToGun()
+        for _, obj in pairs(workspace:GetChildren()) do
+            if obj.Name == "GunDrop" and obj:IsA("Model") then
+                player.Character.HumanoidRootPart.CFrame = obj.PrimaryPart.CFrame
+            end
         end
     end
+    pcall(teleportToGun)
 end)
 
+-- Modo Elétrico
 ElectricModeButton.MouseButton1Click:Connect(function()
     local plr = game.Players.LocalPlayer
     local char = plr.Character or plr.CharacterAdded:Wait()
@@ -123,6 +129,7 @@ ElectricModeButton.MouseButton1Click:Connect(function()
     end
 end)
 
+-- Alerta Murder Perto
 AlertModeButton.MouseButton1Click:Connect(function()
     local Players = game:GetService("Players")
     local LocalPlayer = Players.LocalPlayer
@@ -144,14 +151,17 @@ AlertModeButton.MouseButton1Click:Connect(function()
     end
 end)
 
+-- Velocidade Turbo
 SpeedBoostButton.MouseButton1Click:Connect(function()
     game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 30
 end)
 
+-- Pulo Aumentado
 JumpBoostButton.MouseButton1Click:Connect(function()
     game.Players.LocalPlayer.Character.Humanoid.JumpPower = 100
 end)
 
+-- Fechar
 CloseButton.MouseButton1Click:Connect(function()
     ScreenGui:Destroy()
 end)
