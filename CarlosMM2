@@ -6,6 +6,8 @@
 local ScreenGui = Instance.new("ScreenGui")
 local MainFrame = Instance.new("Frame")
 local Title = Instance.new("TextLabel")
+
+-- Botões
 local ESPButton = Instance.new("TextButton")
 local GrabGunButton = Instance.new("TextButton")
 local TeleportButton = Instance.new("TextButton")
@@ -52,6 +54,7 @@ local function CreateButton(name, text, posY)
     return button
 end
 
+-- Criar botões
 ESPButton = CreateButton("ESPButton", "Ativar ESP (Murder/Sheriff)", 50)
 GrabGunButton = CreateButton("GrabGunButton", "Auto Pegar Arma", 100)
 TeleportButton = CreateButton("TeleportButton", "Teleportar para Arma", 150)
@@ -62,10 +65,23 @@ JumpBoostButton = CreateButton("JumpBoostButton", "Pulo Aumentado", 350)
 CloseButton = CreateButton("CloseButton", "Fechar", 390)
 CloseButton.BackgroundColor3 = Color3.fromRGB(255, 60, 60)
 
--- Funções
+-- ESP com cor baseada no papel
 ESPButton.MouseButton1Click:Connect(function()
     for _, player in pairs(game.Players:GetPlayers()) do
         if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChild("Head") then
+            -- Remover ESP antigo
+            if player.Character.Head:FindFirstChild("ESPLabel") then
+                player.Character.Head.ESPLabel:Destroy()
+            end
+
+            local roleColor = Color3.fromRGB(255, 255, 255) -- padrão: branco
+
+            if player.Backpack:FindFirstChild("Knife") or (player.Character:FindFirstChild("Knife")) then
+                roleColor = Color3.fromRGB(255, 0, 0) -- Murder: vermelho
+            elseif player.Backpack:FindFirstChild("Gun") or (player.Character:FindFirstChild("Gun")) then
+                roleColor = Color3.fromRGB(0, 170, 255) -- Sheriff: azul
+            end
+
             local esp = Instance.new("BillboardGui")
             esp.Name = "ESPLabel"
             esp.Size = UDim2.new(0, 100, 0, 40)
@@ -76,20 +92,20 @@ ESPButton.MouseButton1Click:Connect(function()
             local text = Instance.new("TextLabel", esp)
             text.Size = UDim2.new(1, 0, 1, 0)
             text.Text = player.Name
-            text.TextColor3 = Color3.new(0, 1, 1)
+            text.TextColor3 = roleColor
             text.BackgroundTransparency = 1
             text.TextScaled = true
         end
     end
 end)
 
--- Auto Pegar Arma
+-- Auto Grab Gun
 GrabGunButton.MouseButton1Click:Connect(function()
     local player = game.Players.LocalPlayer
     local function grabGun()
         for _, obj in pairs(workspace:GetChildren()) do
-            if obj.Name == "GunDrop" and obj:IsA("Model") then
-                player.Character.HumanoidRootPart.CFrame = obj.PrimaryPart.CFrame
+            if obj.Name == "GunDrop" then
+                player.Character.HumanoidRootPart.CFrame = obj.CFrame
             end
         end
     end
@@ -100,15 +116,11 @@ end)
 
 -- Teleportar para Arma
 TeleportButton.MouseButton1Click:Connect(function()
-    local player = game.Players.LocalPlayer
-    local function teleportToGun()
-        for _, obj in pairs(workspace:GetChildren()) do
-            if obj.Name == "GunDrop" and obj:IsA("Model") then
-                player.Character.HumanoidRootPart.CFrame = obj.PrimaryPart.CFrame
-            end
+    for _, obj in pairs(workspace:GetChildren()) do
+        if obj.Name == "GunDrop" then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = obj.CFrame
         end
     end
-    pcall(teleportToGun)
 end)
 
 -- Modo Elétrico
@@ -151,17 +163,18 @@ AlertModeButton.MouseButton1Click:Connect(function()
     end
 end)
 
--- Velocidade Turbo
+-- Velocidade
 SpeedBoostButton.MouseButton1Click:Connect(function()
     game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 30
 end)
 
--- Pulo Aumentado
+-- Pulo
 JumpBoostButton.MouseButton1Click:Connect(function()
     game.Players.LocalPlayer.Character.Humanoid.JumpPower = 100
 end)
 
--- Fechar
+-- Fechar GUI
 CloseButton.MouseButton1Click:Connect(function()
     ScreenGui:Destroy()
 end)
+
